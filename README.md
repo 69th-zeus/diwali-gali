@@ -11,7 +11,7 @@ Turn your sound on. It gets loud.
 - **🧨 Gali**: pick a cracker, strike the matchstick on the box, light the fuse, and hope it's not a dud.
 - **🛕 Mandir**: light the lamps on the pillar, ring the temple bell, float diyas on the water.
 - **🌸 Rangoli**: draw a mirrored rangoli with powder, petals and dots, or hit *Surprise me*.
-- **🚀 Rocket war**: a 60-second rooftop battle against Bunty, Chintu and Pappu. Fire rockets at them, duck behind your wall, and finish with the most points. Every 5 hits earns a Lakshmi bomb that blasts a whole rooftop.
+- **🚀 Rocket war**: a 60-second rooftop battle against Bunty, Chintu and Pappu. Fire rockets at them, duck behind your wall, and finish with the most points. Every 5 hits earns a Lakshmi bomb that hits everyone near where it lands.
 
 ## Crackers
 
