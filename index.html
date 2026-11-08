@@ -100,6 +100,9 @@ body.s-gali .panel.gali,body.s-mandir .panel.mandir,body.s-rangoli .panel.rangol
 .war-dock{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
 .duck{position:relative;font:800 18px/1 var(--f-body);color:var(--label-ink);background:var(--label);border:3px solid var(--label-edge);border-radius:12px;padding:16px 28px 14px;box-shadow:0 4px 0 var(--label-drop);cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none}
 .duck.on{transform:translateY(3px);box-shadow:0 1px 0 var(--label-drop);background:var(--btn-bg);color:var(--btn-ink);border-color:var(--btn-bg)}
+.duck[hidden]{display:none}
+.duck.bomb{font-size:16px;padding:14px 16px 12px}
+.duck.bomb[aria-pressed="true"]{background:var(--btn-bg);color:var(--btn-ink);border-color:var(--btn-bg);box-shadow:0 0 0 3px var(--flame),0 4px 0 var(--label-drop)}
 .war-hint{margin:0;max-width:30ch;font:600 14px/1.3 var(--f-body);color:rgba(252,235,196,.8)}
 .reload{width:120px;height:8px;border-radius:4px;background:rgba(252,235,196,.18);overflow:hidden}
 .reload span{display:block;height:100%;width:100%;background:var(--flame);transform-origin:left}
@@ -140,8 +143,10 @@ body.s-gali .panel.gali,body.s-mandir .panel.mandir,body.s-rangoli .panel.rangol
 .intro-rangoli{position:absolute;left:50%;top:42%;width:min(92vw,580px);aspect-ratio:1;transform:translate(-50%,-50%);opacity:.13;pointer-events:none;z-index:-1;animation:spin 140s linear infinite}
 .intro-rangoli svg{width:100%;height:100%;display:block}
 @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
-.greet{display:flex;flex-direction:column;align-items:center;transition:opacity .45s ease;min-height:3.4em}
-.greet.fade{opacity:0}
+.greet{display:grid;justify-items:center;align-items:center;margin-bottom:2px}
+.g-item{grid-area:1/1;margin:0;display:flex;flex-direction:column;align-items:center;opacity:0;transition:opacity .7s ease}
+.g-item.on{opacity:1}
+
 .greet span{font-weight:700;font-size:clamp(20px,5.2vw,36px);line-height:1.35;color:var(--flame);text-shadow:0 0 18px rgba(255,150,40,.6);white-space:nowrap}
 .greet small{font-size:13px;font-weight:600;color:rgba(252,235,196,.62)}
 .intro h1{font-family:var(--f-display);font-weight:400;font-size:clamp(56px,14vw,128px);line-height:.95;margin:6px 0 16px;color:#fff3d6;text-shadow:0 0 6px rgba(255,200,110,.65),0 0 30px rgba(255,140,40,.6),0 0 90px rgba(255,100,20,.4)}
@@ -161,7 +166,7 @@ body.s-gali .panel.gali,body.s-mandir .panel.mandir,body.s-rangoli .panel.rangol
 .soundnote{margin:14px 0 0;font-size:14px;color:rgba(252,235,196,.62)}
 .madeby{margin:20px 0 0;font-size:16px;color:rgba(252,235,196,.78)}
 .madeby b{color:var(--flame);font-weight:800;text-shadow:0 0 12px rgba(255,150,40,.5)}
-@media (prefers-reduced-motion: reduce){.intro-rangoli,.diya i{animation:none}.intro,.dock,.card,.greet,.prompt,.fade{transition:none}}
+@media (prefers-reduced-motion: reduce){.intro-rangoli,.diya i{animation:none}.intro,.dock,.card,.g-item,.prompt,.fade{transition:none}}
 </style>
 </head>
 <body class="s-gali">
@@ -203,7 +208,7 @@ body.s-gali .panel.gali,body.s-mandir .panel.mandir,body.s-rangoli .panel.rangol
       </div></div>
     </div>
   </div>
-  <div class="panel war"><div class="war-dock"><button type="button" id="duckBtn" class="duck" aria-pressed="false">Duck</button><div><div class="reload" aria-hidden="true"><span id="reloadBar"></span></div><p class="war-hint" id="warHint">Tap a spot to fire there. Hold Duck to hide behind your wall.</p></div></div></div>
+  <div class="panel war"><div class="war-dock"><button type="button" id="duckBtn" class="duck" aria-pressed="false">Duck</button><button type="button" id="bombBtn" class="duck bomb" aria-pressed="false" hidden>💣 Lakshmi bomb ×0</button><div><div class="reload" aria-hidden="true"><span id="reloadBar"></span></div><p class="war-hint" id="warHint">Tap a spot to fire there. Hold Duck to hide behind your wall.</p></div></div></div>
 </div>
 
 <div id="card" class="card" role="dialog" aria-labelledby="cardTitle" hidden>
@@ -218,7 +223,7 @@ body.s-gali .panel.gali,body.s-mandir .panel.mandir,body.s-rangoli .panel.rangol
 <div id="intro" class="intro">
   <div class="intro-inner">
     <div class="intro-rangoli" id="rangoliArt" aria-hidden="true"></div>
-    <div class="greet" id="greet" aria-hidden="true"><span id="greetLine" lang="hi">शुभ दीपावली</span><small id="greetLang">Hindi</small></div>
+    <div class="greet" id="greet" aria-hidden="true"><p class="g-item on"><span lang="hi">शुभ दीपावली</span><small>Hindi</small></p><p class="g-item"><span lang="kn">ದೀಪಾವಳಿ ಹಬ್ಬದ ಶುಭಾಶಯಗಳು</span><small>Kannada</small></p><p class="g-item"><span lang="te">దీపావళి శుభాకాంక్షలు</span><small>Telugu</small></p><p class="g-item"><span lang="ta">தீபாவளி நல்வாழ்த்துகள்</span><small>Tamil</small></p><p class="g-item"><span lang="ml">ദീപാവലി ആശംസകൾ</span><small>Malayalam</small></p><p class="g-item"><span lang="bn">শুভ দীপাবলি</span><small>Bengali</small></p></div>
     <h1>Happy Diwali</h1>
     <p class="wish">May a thousand diyas light up your home, may the mithai never run out, and may every cracker you light tonight actually go off.</p>
     <div class="diyarow" aria-hidden="true"><span class="diya"><i></i></span><span class="diya"><i></i></span><span class="diya"><i></i></span><span class="diya"><i></i></span><span class="diya"><i></i></span></div>
@@ -1998,24 +2003,25 @@ scenes.war = (() => {
   const BULB = [[255, 70, 70], [70, 225, 100], [80, 140, 255], [255, 210, 70], [255, 90, 215]];
   let L = {}, skyL = null, bldL = null, parL = null, stamp = '';
   let phase = 'ready', diff = 'normal', tEnd = 0, tCount = 0, lastSec = -1, lastCount = -1;
-  let chars = [], rockets = [], me = null, cool = 0, duckKey = false, duckBtn = false, aiming = false, best = 0, bulbs = [], pdiyas = [];
-  const timerEl = $('#warTimer'), boardEl = $('#warBoard'), hudEl = $('#warHud'), duckEl = $('#duckBtn'), reloadEl = $('#reloadBar'), hintEl = $('#warHint');
+  let chars = [], rockets = [], me = null, cool = 0, duckKey = false, duckBtn = false, aiming = false, best = 0, bulbs = [], pdiyas = [], armed = false;
+  const timerEl = $('#warTimer'), boardEl = $('#warBoard'), hudEl = $('#warHud'), duckEl = $('#duckBtn'), reloadEl = $('#reloadBar'), hintEl = $('#warHint'), bombEl = $('#bombBtn');
   try { best = +localStorage.getItem('diwaliGali.rocketBest') || 0; const d = localStorage.getItem('diwaliGali.rocketDiff'); if (DIFF[d]) diff = d; } catch (e) {}
-  hintEl.textContent = coarse ? 'Tap a spot to fire there. Hold Duck to hide behind your wall.' : 'Click a spot to fire there. Hold Duck or Space to hide behind your wall.';
+  const defaultHint = coarse ? 'Tap a spot to fire there. Hold Duck to hide behind your wall.' : 'Click a spot to fire there. Hold Duck or Space to hide behind your wall.';
+  hintEl.textContent = defaultHint;
 
   function layout(){
     const dockH = dockEl.offsetHeight || 90, pb = H - dockH, s = clamp(Math.min(W / 1100, H / 760), 0.62, 1.15), top = Math.min(180, H * 0.24), span = pb - top, nr = W < 700;
     const bld = [
-      { x0: -10, x1: Math.round(W * (nr ? 0.31 : 0.24)), roof: Math.round(top + span * 0.64), col: '#7c4f7a' },
-      { x0: Math.round(W * (nr ? 0.41 : 0.46)), x1: Math.round(W * (nr ? 0.57 : 0.61)), roof: Math.round(top + span * 0.44), col: '#4f7f79' },
-      { x0: Math.round(W * (nr ? 0.61 : 0.65)), x1: Math.round(W * (nr ? 0.79 : 0.8)), roof: Math.round(top + span * 0.68), col: '#9e7646' },
-      { x0: Math.round(W * (nr ? 0.83 : 0.84)), x1: W + 10, roof: Math.round(top + span * 0.3), col: '#6e7090' }
+      { x0: -10, x1: Math.round(W * (nr ? 0.31 : 0.24)), roof: Math.round(top + span * 0.62), col: '#7c4f7a' },
+      { x0: Math.round(W * (nr ? 0.41 : 0.46)), x1: Math.round(W * (nr ? 0.57 : 0.61)), roof: Math.round(top + span * 0.6), col: '#4f7f79' },
+      { x0: Math.round(W * (nr ? 0.61 : 0.65)), x1: Math.round(W * (nr ? 0.79 : 0.8)), roof: Math.round(top + span * 0.65), col: '#9e7646' },
+      { x0: Math.round(W * (nr ? 0.83 : 0.84)), x1: W + 10, roof: Math.round(top + span * 0.58), col: '#6e7090' }
     ];
     L = { s, pb, top, bld, par: Math.round(16 * s + 5) };
     FXS = s; Far.base = Math.min(...bld.map(b => b.roof)) - 20;
   }
   function placeChars(){
-    if (!chars.length) { chars = PEOPLE.map((p, i) => ({ id: i, ...p, score: 0, down: 0, duckUntil: 0, duckAmt: 0, soot: -99, next: 0, lastFire: -9, dir: i === 0 ? 1 : -1 })); me = chars[0]; }
+    if (!chars.length) { chars = PEOPLE.map((p, i) => ({ id: i, ...p, score: 0, down: 0, duckUntil: 0, duckAmt: 0, soot: -99, next: 0, lastFire: -9, hits: 0, bombs: 0, dir: i === 0 ? 1 : -1 })); me = chars[0]; }
     chars.forEach((ch, i) => { const b = L.bld[i]; ch.roof = b.roof; ch.x = i === 0 ? Math.round(b.x1 - 34 * L.s) : Math.round(b.x0 + Math.max(24 * L.s, (b.x1 - b.x0) * 0.42)); ch.lx = ch.x + ch.dir * 18 * L.s; ch.ly = b.roof - L.par - 20 * L.s; });
   }
   function renderStatic(){
@@ -2067,16 +2073,18 @@ scenes.war = (() => {
 
   const hc = ch => { const s = L.s, pt = ch.roof - L.par; return ch.duckAmt > 0.6 ? { x: ch.x, y: pt + 2 * s, r: 5 * s } : { x: ch.x, y: pt - 12 * s, r: 14 * s }; };
   const isDucking = () => duckKey || duckBtn;
-  function flight(ch, tx, ty){
-    const sp = clamp(L.s, 0.7, 1.1), dx = tx - ch.lx, dy = ty - ch.ly, tau = clamp(Math.hypot(dx, dy) / (10.5 * sp), 24, 62), g = 0.13 * sp;
+  function flight(ch, tx, ty, lob){
+    const sp = clamp(L.s, 0.7, 1.1), dx = tx - ch.lx, dy = ty - ch.ly, tau = clamp(Math.hypot(dx, dy) / (10.5 * sp), 24, 62) * (lob ? 1.45 : 1), g = 0.13 * sp;
     return { vx: dx / tau, vy: (dy - 0.5 * g * tau * tau) / tau, g, tau };
   }
-  function fire(ch, tx, ty, spread){
-    let { vx, vy, g, tau } = flight(ch, tx, ty);
+  function fire(ch, tx, ty, spread, bomb){
+    let { vx, vy, g, tau } = flight(ch, tx, ty, bomb);
     if (spread) { const a = rand(-spread, spread), cs = Math.cos(a), sn = Math.sin(a), nvx = vx * cs - vy * sn; vy = vx * sn + vy * cs; vx = nvx; }
-    rockets.push({ x: ch.lx, y: ch.ly, vx, vy, g, owner: ch, t: 0, life: tau * 1.8, seen: 0, dead: false });
+    rockets.push({ x: ch.lx, y: ch.ly, vx, vy, g, owner: ch, t: 0, life: tau * 1.8, seen: 0, dead: false, bomb: !!bomb, spin: 0 });
     ch.lastFire = T;
-    const pan = ((ch.lx / W) * 2 - 1) * 0.7; Snd.thoomp(pan); Snd.whistle(0.6, { f0: 1400, f1: 2600, vol: 0.03, pan, vib: 16, vibDepth: 50 });
+    const pan = ((ch.lx / W) * 2 - 1) * 0.7;
+    if (bomb) { Snd.hiss(1.6, { freq: 5200, vol: 0.07, pan }); floatText(ch.x, ch.roof - L.par - 62 * L.s, ch === me ? 'Lakshmi bomb away!' : `${ch.name}: Lakshmi bomb!`, '#ff9a8a', 16); updateBoard(); }
+    else { Snd.thoomp(pan); Snd.whistle(0.6, { f0: 1400, f1: 2600, vol: 0.03, pan, vib: 16, vibDepth: 50 }); }
     for (let i = 0; i < 8; i++) addSpark(ch.lx, ch.ly, rand(-1.5, 1.5) + vx * 0.2, rand(-1.5, 1.5) + vy * 0.2, rand(6, 12), C.GOLD, 1.2, 0.9, 0.05);
     addSmoke(ch.lx, ch.ly + 4, rand(-0.4, 0.4), rand(-0.6, -0.2), rand(5, 8), 0.5, 0.35, 90);
   }
@@ -2089,10 +2097,22 @@ scenes.war = (() => {
     Snd.boom(0.45, pan, 0, { small: true });
     if (splash) for (const ch of chars) { if (ch === owner || ch.down > 0 || ch.duckAmt > 0.5) continue; const h = hc(ch); if (Math.hypot(h.x - x, h.y - y) < h.r + 16 * s) hit(ch, owner); }
   }
+  function bombBlast(x, y, owner){
+    const s = L.s, pan = ((x / W) * 2 - 1) * 0.7;
+    explode(x, y, 0.9, y + 30 * s, { papers: 50 }); Snd.boom(1.1, pan);
+    let n = 0;
+    for (const ch of chars) { if (ch === owner || ch.down > 0) continue; const h = hc(ch); if (Math.hypot(h.x - x, h.y - y) < 72 * s) { hit(ch, owner); n++; } }
+    if (n > 1 && owner && phase === 'play') { owner.score += 50; floatText(x, y - 80 * s, 'Double hit! +50', '#ffe08a', 18); updateBoard(); }
+  }
+  function grantBomb(ch){
+    ch.bombs++; const y = ch.roof - L.par - 84 * L.s;
+    if (ch === me) { floatText(ch.x, y, 'Lakshmi bomb unlocked!', '#ffe08a', 18); Snd.chime(783.99, 0.05); updateBombBtn(); }
+    else floatText(ch.x, y, `${ch.name} got a Lakshmi bomb`, '#ff9a8a', 14);
+  }
   function hit(ch, owner){
     if (ch.down > 0) return;
     ch.down = 1.6; ch.soot = T; const s = L.s, head = ch.roof - L.par;
-    if (owner && phase === 'play') { owner.score += 100; floatText(ch.x, head - 40 * s, owner === me ? '+100' : `${owner.name} +100`, owner === me ? '#ffe08a' : '#ffffff', owner === me ? 22 : 16); }
+    if (owner && phase === 'play') { owner.score += 100; owner.hits++; if (owner.hits % 5 === 0) grantBomb(owner); floatText(ch.x, head - 40 * s, owner === me ? '+100' : `${owner.name} +100`, owner === me ? '#ffe08a' : '#ffffff', owner === me ? 22 : 16); }
     const pan = ((ch.x / W) * 2 - 1) * 0.7; Snd.bonk(pan); Snd.ouch(ch.pitch, pan);
     for (let i = 0; i < 14; i++) addPaper(ch.x, head - 10 * s, rand(-4, 4), rand(-7, -2), head + rand(10, 60));
     if (ch === me) { setFlash(ch.x, head - 20, 0.5, 1, [255, 80, 60]); addShake(10); floatText(ch.x, head - 60 * s, 'Ouch!', '#ff9a8a', 20); if (owner && Math.random() < 0.6) floatText(owner.x, owner.roof - L.par - 60 * s, pick(['Hehe!', 'Gotcha!', 'Ha!']), '#ffffff', 15); }
@@ -2103,7 +2123,7 @@ scenes.war = (() => {
     const sp = clamp(L.s, 0.7, 1.1);
     for (const r of rockets) {
       if (r.dead) continue;
-      r.t += k; r.vy += r.g * k; r.x += r.vx * k; r.y += r.vy * k;
+      r.t += k; r.vy += r.g * k; r.x += r.vx * k; r.y += r.vy * k; r.spin += 0.3 * k;
       if (Math.random() < 0.9) addSpark(r.x - r.vx * 0.5, r.y - r.vy * 0.5, rand(-0.4, 0.4) - r.vx * 0.1, rand(-0.4, 0.4) - r.vy * 0.1, rand(8, 16), r.owner === me ? C.GOLD : C.AMBER, 1.1, 0.94, 0.03);
       if (Math.random() < 0.25 * k) addSmoke(r.x, r.y, rand(-0.2, 0.2), rand(-0.3, 0), rand(2, 4), 0.35, 0.2, 60);
       pushLight(r.x, r.y, 46, [255, 190, 110], 0.55);
@@ -2122,11 +2142,11 @@ scenes.war = (() => {
         const tf = (ch.x - r.x) / r.vx;
         if (tf > 0 && tf < 36) { r.seen |= 1 << ch.id; const py = r.y + r.vy * tf + 0.5 * r.g * tf * tf; if (Math.abs(py - hc(ch).y) < 55 && Math.random() < DIFF[diff].duck) ch.duckUntil = T + rand(0.5, 0.95); }
       }
-      for (const ch of chars) { if (ch === r.owner || ch.down > 0) continue; const h = hc(ch); if (Math.hypot(h.x - r.x, h.y - r.y) < h.r + 3) { hit(ch, r.owner); boomAt(r.x, r.y, r.owner, false); gone = true; break; } }
+      for (const ch of chars) { if (ch === r.owner || ch.down > 0) continue; const h = hc(ch); if (Math.hypot(h.x - r.x, h.y - r.y) < h.r + 3) { if (r.bomb) bombBlast(r.x, r.y, r.owner); else { hit(ch, r.owner); boomAt(r.x, r.y, r.owner, false); } gone = true; break; } }
       if (gone) { r.dead = true; continue; }
-      for (const b of L.bld) if (r.x > b.x0 && r.x < b.x1 && r.y > b.roof - L.par) { boomAt(r.x, Math.max(r.y - 2, b.roof - L.par - 2), r.owner, true); gone = true; break; }
+      for (const b of L.bld) if (r.x > b.x0 && r.x < b.x1 && r.y > b.roof - L.par) { const by = Math.max(r.y - 2, b.roof - L.par - 2); if (r.bomb) bombBlast(r.x, by, r.owner); else boomAt(r.x, by, r.owner, true); gone = true; break; }
       if (gone) { r.dead = true; continue; }
-      if (r.t > r.life || r.y > L.pb + 40 || r.x < -60 || r.x > W + 60) { if (r.y < L.pb && r.x > -20 && r.x < W + 20) boomAt(r.x, r.y, r.owner, true); r.dead = true; }
+      if (r.t > r.life || r.y > L.pb + 40 || r.x < -60 || r.x > W + 60) { if (r.y < L.pb && r.x > -20 && r.x < W + 20) { if (r.bomb) bombBlast(r.x, r.y, r.owner); else boomAt(r.x, r.y, r.owner, true); } r.dead = true; }
     }
     rockets = rockets.filter(r => !r.dead);
   }
@@ -2141,14 +2161,16 @@ scenes.war = (() => {
       const tgt = me.down <= 0 && (Math.random() < 0.7 || !others.length) ? me : pick(others);
       if (!tgt) continue;
       const h = hc(tgt), n = D.noise * (1 - 0.35 * prog) * L.s;
-      fire(ch, h.x + rand(-n, n), h.y + rand(-n, n) * 0.7, 0);
+      const lob = ch.bombs > 0 && (tgt === me || Math.random() < 0.5); if (lob) ch.bombs--;
+      fire(ch, h.x + rand(-n, n), h.y + rand(-n, n) * 0.7, 0, lob);
     }
   }
   function tryFire(x, y){
     if (phase !== 'play' || me.down > 0) return;
     if (isDucking()) { floatText(me.x, me.roof - L.par - 44 * L.s, 'Stand up to fire', '#ffffff', 14); return; }
     if (T < cool) return;
-    fire(me, x, y, 0.02); cool = T + 0.5;
+    const lob = armed && me.bombs > 0; if (lob) { me.bombs--; armed = false; updateBombBtn(); }
+    fire(me, x, y, 0.02, lob); cool = T + (lob ? 0.9 : 0.5);
   }
 
   /* ---------- drawing ---------- */
@@ -2157,6 +2179,7 @@ scenes.war = (() => {
     let off = ch.duckAmt * 19 * s;
     if (ch.down > 0) { const fallT = 1.6 - ch.down; off = fallT < 0.18 ? lerp(off, hidden, fallT / 0.18) : ch.down < 0.25 ? lerp(off, hidden, ch.down / 0.25) : hidden; }
     const hx = ch.x, hy = pt - 16 * s + off;
+    c.save(); c.beginPath(); c.rect(hx - 60 * s, 0, 120 * s, ch.roof); c.clip();
     c.fillStyle = ch.col; rrect(c, hx - 11 * s, hy + 6 * s, 22 * s, 26 * s, 6 * s); c.fill();
     c.strokeStyle = ch.col; c.lineWidth = 5 * s; c.lineCap = 'round'; c.beginPath(); c.moveTo(hx + ch.dir * 8 * s, hy + 10 * s); c.lineTo(hx + ch.dir * 16 * s, hy + 15 * s); c.stroke();
     c.fillStyle = ch.skin; c.beginPath(); c.arc(hx, hy, 7.5 * s, 0, TAU); c.fill();
@@ -2168,6 +2191,7 @@ scenes.war = (() => {
       c.strokeStyle = '#1b1210'; c.lineWidth = 1.4; c.beginPath(); for (let i = -3; i <= 3; i++) { const a = -Math.PI / 2 + i * 0.32; c.moveTo(hx + Math.cos(a) * 7 * s, hy + Math.sin(a) * 7 * s); c.lineTo(hx + Math.cos(a) * 11.5 * s, hy + Math.sin(a) * 11.5 * s); } c.stroke();
       c.fillStyle = '#fff'; c.fillRect(hx + ch.dir * 2 * s - 0.8, hy - 0.5 * s, 1.6 * s, 1.6 * s); c.fillRect(hx + ch.dir * 5 * s - 0.8, hy - 0.5 * s, 1.4 * s, 1.4 * s);
     }
+    c.restore();
   }
   function drawLauncher(c, ch){
     const s = L.s, x = ch.lx, y = ch.roof - L.par - 2;
@@ -2178,6 +2202,7 @@ scenes.war = (() => {
   }
   function drawRocketBodies(c){
     for (const r of rockets) {
+      if (r.bomb) { c.save(); c.translate(r.x, r.y); c.rotate(r.spin); c.fillStyle = '#c41c22'; rrect(c, -7, -5, 14, 10, 2); c.fill(); c.fillStyle = '#f2c63c'; c.fillRect(-3.5, -3.5, 7, 7); c.fillStyle = '#c41c22'; c.beginPath(); c.arc(0, 0, 1.8, 0, TAU); c.fill(); c.restore(); continue; }
       const a = Math.atan2(r.vy, r.vx); c.save(); c.translate(r.x, r.y); c.rotate(a);
       c.strokeStyle = '#c9a46a'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(-9, 1.5); c.lineTo(-26, 1.5); c.stroke();
       c.fillStyle = r.owner.col; c.fillRect(-9, -2.5, 12, 5); c.fillStyle = '#f2c63c'; c.beginPath(); c.moveTo(3, -2.5); c.lineTo(8, 0); c.lineTo(3, 2.5); c.fill();
@@ -2196,12 +2221,13 @@ scenes.war = (() => {
   function drawAim(c){
     if (phase !== 'play' || me.down > 0 || isDucking()) return;
     if (!((P.type === 'mouse' && P.known) || aiming)) return;
-    const { vx, vy, g, tau } = flight(me, P.x, P.y);
+    const lob = armed && me.bombs > 0, { vx, vy, g, tau } = flight(me, P.x, P.y, lob);
     c.globalCompositeOperation = 'lighter';
     for (let t = 4; t < tau; t += 3) { const x = me.lx + vx * t, y = me.ly + vy * t + 0.5 * g * t * t; c.globalAlpha = 0.55 * (1 - t / tau) + 0.1; c.fillStyle = '#fff3d6'; c.fillRect(x - 1.2, y - 1.2, 2.4, 2.4); }
     c.globalAlpha = 1; c.globalCompositeOperation = 'source-over';
-    const ok = T >= cool; c.strokeStyle = ok ? 'rgba(255,226,140,0.95)' : 'rgba(255,255,255,0.35)'; c.lineWidth = 1.6;
+    const ok = T >= cool; c.strokeStyle = !ok ? 'rgba(255,255,255,0.35)' : lob ? 'rgba(255,120,90,0.95)' : 'rgba(255,226,140,0.95)'; c.lineWidth = 1.6;
     c.beginPath(); c.arc(P.x, P.y, 11, 0, TAU); c.moveTo(P.x - 17, P.y); c.lineTo(P.x - 6, P.y); c.moveTo(P.x + 6, P.y); c.lineTo(P.x + 17, P.y); c.moveTo(P.x, P.y - 17); c.lineTo(P.x, P.y - 6); c.moveTo(P.x, P.y + 6); c.lineTo(P.x, P.y + 17); c.stroke();
+    if (lob) { c.setLineDash([4, 5]); c.beginPath(); c.arc(P.x, P.y, 72 * L.s, 0, TAU); c.stroke(); c.setLineDash([]); }
   }
   function drawLabels(c){
     c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineJoin = 'round';
@@ -2227,21 +2253,21 @@ scenes.war = (() => {
   /* ---------- round flow ---------- */
   function updateBoard(){
     const top = Math.max(...chars.map(c => c.score));
-    boardEl.innerHTML = chars.map(ch => `<li class="${ch === me ? 'me' : ''}"><i style="background:${ch.col}"></i>${ch.name} ${ch.score}${ch.score === top && top > 0 ? ' 👑' : ''}</li>`).join('');
+    boardEl.innerHTML = chars.map(ch => `<li class="${ch === me ? 'me' : ''}"><i style="background:${ch.col}"></i>${ch.name} ${ch.score}${ch.score === top && top > 0 ? ' 👑' : ''}${ch.bombs ? ' 💣'.repeat(Math.min(3, ch.bombs)) : ''}</li>`).join('');
   }
   function diffButtons(){ return `<div class="seg" role="group" aria-label="Difficulty">${Object.entries(DIFF).map(([k, v]) => `<button type="button" data-diff="${k}" aria-pressed="${k === diff}">${v.label}</button>`).join('')}</div>`; }
   function readyCard(){
     phase = 'ready';
-    showCard({ emoji: '🚀', title: 'Rocket war', html: `<p>Three kids on the rooftops across the street are firing rockets at you, and at each other. You have 60 seconds.</p><ul class="rules"><li>${coarse ? 'Tap' : 'Click'} anywhere to fire a rocket there</li><li>Hit someone for 100 points</li><li>Shoot a rocket out of the air for 50</li><li>Hold Duck${coarse ? '' : ' or Space'} to hide behind your wall</li></ul>${diffButtons()}`, a: { label: 'Start', kbd: 'Enter', fn: startRound }, b: { label: 'Back to the gali', fn: () => goTo('gali') } });
+    showCard({ emoji: '🚀', title: 'Rocket war', html: `<p>Three kids on the rooftops across the street are firing rockets at you, and at each other. You have 60 seconds.</p><ul class="rules"><li>${coarse ? 'Tap' : 'Click'} anywhere to fire a rocket there</li><li>Hit someone for 100 points</li><li>Shoot a rocket out of the air for 50</li><li>Hold Duck${coarse ? '' : ' or Space'} to hide behind your wall</li><li>Every 5 hits earns a Lakshmi bomb. It lands behind walls, so ducking won’t save anyone</li></ul>${diffButtons()}`, a: { label: 'Start', kbd: 'Enter', fn: startRound }, b: { label: 'Back to the gali', fn: () => goTo('gali') } });
   }
   function startRound(){
-    hideCard(); rockets = []; cool = 0;
-    for (const ch of chars) { ch.score = 0; ch.down = 0; ch.duckUntil = 0; ch.duckAmt = 0; ch.soot = -99; ch.next = T + 3 + rand(0.6, 2); }
-    phase = 'count'; tCount = T; lastCount = -1; lastSec = -1; updateBoard(); timerEl.textContent = '1:00'; timerEl.classList.remove('low'); hidePrompt();
+    hideCard(); rockets = []; cool = 0; armed = false;
+    for (const ch of chars) { ch.hits = 0; ch.bombs = 0; ch.score = 0; ch.down = 0; ch.duckUntil = 0; ch.duckAmt = 0; ch.soot = -99; ch.next = T + 3 + rand(0.6, 2); }
+    phase = 'count'; tCount = T; updateBombBtn(); lastCount = -1; lastSec = -1; updateBoard(); timerEl.textContent = '1:00'; timerEl.classList.remove('low'); hidePrompt();
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
   }
   function finish(){
-    phase = 'end'; Snd.horn(); timerEl.textContent = '0:00';
+    phase = 'end'; armed = false; bombEl.hidden = true; Snd.horn(); timerEl.textContent = '0:00';
     const ranked = [...chars].sort((a, b) => b.score - a.score), top = ranked[0].score, winners = ranked.filter(c => c.score === top), meWin = winners.includes(me), tie = winners.length > 1;
     let newBest = false; if (me.score > best) { best = me.score; newBest = true; try { localStorage.setItem('diwaliGali.rocketBest', String(best)); } catch (e) {} }
     if (meWin && !tie) { Snd.cheer(); for (let i = 0; i < 6; i++) after(0.3 + i * 0.35, () => randomShell(me.x + rand(-60, 60), me.roof - L.par, clamp(me.roof - 120, 140, 420), 1)); }
@@ -2260,13 +2286,19 @@ scenes.war = (() => {
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => duckEl.addEventListener(ev, () => setDuckBtn(false)));
   duckEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setDuckBtn(true); } });
   duckEl.addEventListener('keyup', e => { if (e.key === 'Enter' || e.key === ' ') setDuckBtn(false); });
+  function updateBombBtn(){
+    const n = me ? me.bombs : 0; bombEl.hidden = !(n > 0 && phase === 'play'); if (!n) armed = false;
+    bombEl.textContent = `💣 Lakshmi bomb ×${n}`; bombEl.setAttribute('aria-pressed', String(armed));
+    hintEl.textContent = armed ? (coarse ? 'Bomb ready. Tap a rooftop to lob it.' : 'Bomb ready. Click a rooftop to lob it.') : defaultHint;
+  }
+  bombEl.addEventListener('click', () => { bombEl.blur(); if (!me || me.bombs <= 0 || phase !== 'play') return; armed = !armed; updateBombBtn(); });
 
   return {
     enter(){
       if (stamp !== stampNow() || !skyL) relayout(); else { FXS = L.s; Far.base = Math.min(...L.bld.map(b => b.roof)) - 20; }
       debrisCtx = null; hudEl.hidden = false; updateBoard(); timerEl.textContent = '1:00'; timerEl.classList.remove('low'); readyCard();
     },
-    exit(){ hudEl.hidden = true; phase = 'ready'; rockets = []; duckKey = false; setDuckBtn(false); aiming = false; skyL = bldL = parL = null; stamp = ''; },
+    exit(){ hudEl.hidden = true; phase = 'ready'; rockets = []; duckKey = false; setDuckBtn(false); aiming = false; armed = false; bombEl.hidden = true; skyL = bldL = parL = null; stamp = ''; },
     resize(){ relayout(); },
     update(dt, k){
       for (const ch of chars) {
@@ -2303,7 +2335,7 @@ scenes.war = (() => {
     down(){ if (P.type === 'touch') aiming = true; else tryFire(P.x, P.y); },
     move(){},
     up(){ if (aiming) { aiming = false; tryFire(P.x, P.y); } },
-    key(e, isDown){ if (e.key === ' ' || e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') { e.preventDefault(); duckKey = isDown; } }
+    key(e, isDown){ if (e.key === ' ' || e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') { e.preventDefault(); duckKey = isDown; } else if (isDown && (e.key === 'b' || e.key === 'B') && me && me.bombs > 0 && phase === 'play') { armed = !armed; updateBombBtn(); } }
   };
 })();
 
@@ -2361,11 +2393,11 @@ function start(){
   for (let k = 0; k < 48; k++) { const a = k / 48 * TAU; s += `<circle cx="${(Math.cos(a) * 98).toFixed(2)}" cy="${(Math.sin(a) * 98).toFixed(2)}" r="1.3" fill="#fcebc4"/>`; }
   $('#rangoliArt').innerHTML = s + '<circle r="9" fill="#f7c531"/><circle r="4" fill="#e8344a"/></svg>';
   const G = [['शुभ दीपावली', 'Hindi', 'hi'], ['ದೀಪಾವಳಿ ಹಬ್ಬದ ಶುಭಾಶಯಗಳು', 'Kannada', 'kn'], ['దీపావళి శుభాకాంక్షలు', 'Telugu', 'te'], ['தீபாவளி நல்வாழ்த்துகள்', 'Tamil', 'ta'], ['ദീപാവലി ആശംസകൾ', 'Malayalam', 'ml'], ['শুভ দীপাবলি', 'Bengali', 'bn']];
-  let gi = 0; const el = $('#greet'), line = $('#greetLine'), lang = $('#greetLang');
+  const items = $$('#greet .g-item'); let gi = 0;
   const timer = setInterval(() => {
     if (!introOpen) { clearInterval(timer); return; }
-    el.classList.add('fade');
-    setTimeout(() => { gi = (gi + 1) % G.length; const [t, n, l] = G[gi]; line.textContent = t; line.lang = l; lang.textContent = n; el.classList.remove('fade'); }, reduceMotion ? 0 : 450);
+    items[gi].classList.remove('on'); gi = (gi + 1) % items.length; items[gi].classList.add('on');
+    
   }, 2600);
 })();
 $('#startBtn').addEventListener('click', start);
