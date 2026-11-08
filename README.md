@@ -2,7 +2,7 @@
 
 Light crackers on an Indian street on Diwali night, right in your browser.
 
-**▶ Play it here: https://zeus-mtolympus.github.io/diwali-gali/**
+**▶ Play it here: https://69th-zeus.github.io/diwali-gali/**
 
 Pick a cracker, strike the matchstick on the box, light the fuse, and hope it's not a dud. Turn your sound on, it gets loud.
 
